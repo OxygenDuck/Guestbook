@@ -12,7 +12,7 @@ if (!$connect) {
   die('error connecting to database');
 }
 
-//heroes
+//SQL
 $query = "SELECT * FROM data;";
 //get the data from the database
 $result = $connect->query($query);
@@ -23,6 +23,12 @@ $data = array();
 while ($row = $result->fetch_assoc()) {
   $data[] = $row;
 }
+
+usort($data, function($a1, $a2) {
+   $v1 = strtotime($a1['date']);
+   $v2 = strtotime($a2['date']);
+   return $v2 - $v1; // $v2 - $v1 to reverse direction
+});
 
 //close the connection to the Database
 mysqli_close($connect);

@@ -6,7 +6,7 @@ body {
 header {
   background-color: #e898a6;
   padding: 7px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   text-align: center;
 }
 
@@ -24,11 +24,25 @@ header h2 {
   font-style: italic;
 }
 
+header p {
+  margin-top: 0;
+  font-family: monospace;
+}
+
+#alert {
+  background-color: #fbe2e2;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  width: 80%;
+  border-radius: 4px;
+  font-size: 22px;
+}
+
 /*--Form--*/
 form {
   width: 24%;
-  background-color: #dc244f;
-  border: 7px solid #af3154;
+  background-color: #ff5df6;
+  border: 7px solid #ef52a9;
   border-radius: 10px;
   text-align: left;
   font-size: 30px;

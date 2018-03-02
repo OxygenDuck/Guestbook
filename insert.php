@@ -6,21 +6,53 @@
   $email = $_POST["email"];
   $webaddress = $_POST["webaddress"];
   $message = $_POST["message"];
+  $date = date("Y-n-d h:i:s");
 
-  if ($firstname == "" || $lastname == "" || $email == "" || $message == "") {
-      header("Location: index.php?no=true");
+  //Validation
+
+  session_start();
+
+  $notEnoughData = false;
+
+  if ($firstname == ""){
+    $notEnoughData = true;
+    $_SESSION['firstname'] = "First Name";
   }
 
+  if ($lastname == ""){
+    $notEnoughData = true;
+    $_SESSION['lastname'] = "Last Name";
+  }
+
+  if ($email == ""){
+    $notEnoughData = true;
+    $_SESSION['email'] = "E-mail";
+  }
+
+  if ($message == ""){
+    $notEnoughData = true;
+    $_SESSION['message'] = "Message";
+  }
+
+  if ($notEnoughData == true){
+    header("Location: index.php?insufficient=true");
+  }
+  else {
+    foreach ($_SESSION as $value) {
+      $value = "";
+    }
+  }
+
+  //Captcha Validation
   include_once 'securimage/securimage.php';
   $securimage = new Securimage();
 
   if ($securimage->check($_POST['captcha_code']) == false) {
   echo "The security code entered was incorrect.<br /><br />";
   echo "Please go <a href='javascript:history.go(-1)'>back</a> and try again.";
-  header('location: index.php');
+  header('location: index.php?wrongCaptcha=true');
   exit;
 }
-  echo "If everything is filled in, this will be displayed";
 
 
   //connecting to the database
@@ -36,7 +68,7 @@
     die('error connecting to database');
   }
 
-  $query = "INSERT INTO data(firstname, insertion, lastname, email, webaddress, message) VALUES($firstname, $insertion, $lastname, $email, $webaddress, $message);";
+  $query = "INSERT INTO data(firstname, insertion, lastname, email, webaddress, message, date) VALUES('$firstname', '$insertion', '$lastname', '$email', '$webaddress', '$message', '$date')";
   //get the data from the database
   $result = $connect->query($query);
 
@@ -44,5 +76,5 @@
 
   mysqli_close($connect);
 
-  //header("Location: index.php");
+  header("Location: index.php?valid=true");
  ?>

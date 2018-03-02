@@ -1,5 +1,13 @@
+<?php
+  if (isset($_POST["insert"])) {
+      include "insert.php";
+  }
+  session_start();
+  ?>
+
 <!DOCTYPE html>
 <html>
+
   <head>
     <meta charset="utf-8">
     <meta name="description" content="Granny's Muffin Bakery is the place for elderly like you and me to share our best cooking recepies!">
@@ -9,20 +17,39 @@
     <title>Guestbook</title>
     <link rel="stylesheet" href="css/style.css">
   </head>
+
   <body>
 
     <header>
       <h1>Granny's Muffin Bakery.</h1>
       <h2>Leave a message!</h2>
+      <p>Please share your own recipes and leave comments on others!</p>
     </header>
 
-    <?php
-    if (isset($_GET["no"])) {
-      echo "YOU HAVENT FILLED IN SOME KEY DETAILS";
-    }
-     ?>
+    <div id="alert">
+      <?php
+      if (isset($_GET["insufficient"])) {
+        echo "You haven't filled in some key details:<br/>
+              <ul>";
+        foreach ($_SESSION as $value) {
+          if ($value == "First Name" || $value == "Last Name" || $value == "E-mail" || $value == "Message") {
+            echo "<li>$value</li>";
+          }
+        }
+        echo "</ul>";
+      }
 
-    <form class="guestbook" action="redirect.php" method="post">
+      if (isset($_GET["wrongCaptcha"])) {
+        echo "The captcha wasn't correct";
+      }
+
+      if (isset($_GET["valid"])) {
+        echo "Thank you for your post!";
+      }
+     ?>
+    </div>
+
+    <form class="guestbook" action="index.php" method="post">
       <label for="firstname">First Name*</label>
       <input type="text" name="firstname" value="">
       <br/>
@@ -50,6 +77,7 @@
       <br/>
       <input type="text" name="captcha_code" size="10" maxlength="6" />
       <br/>
+      <input type="hidden" name="insert" value="true">
       <p>*: has to be filled in</p>
       <input type="submit" name="" value="Submit">
       <input type="reset" name="" value="Reset">
@@ -72,8 +100,10 @@
         }
         ?>
       </div>
+
       <footer>
         <p>©Peter Janssen - 2018 - In association with ROC ter AA</p>
       </footer>
+      
   </body>
 </html>
